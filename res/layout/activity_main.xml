@@ -13,4 +13,10 @@
         android:text="datetime_textview"
         android:textSize="24dip" />
 
+    <TextView
+        android:id="@+id/soundlevel_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="soundlevel_textview" />
+
 </LinearLayout>
