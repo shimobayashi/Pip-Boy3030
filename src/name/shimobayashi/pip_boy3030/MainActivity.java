@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -17,13 +18,24 @@ public class MainActivity extends Activity {
 	private Handler handler;
 	private Timer timer;
 	private SoundLevelMeter soundLevelMeter;
+	private TremorSensor tremorSensor;
 
+	private double tremor = -1;
 	private double db = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Setup TremorSensor
+		tremorSensor = new TremorSensor((SensorManager) getSystemService(SENSOR_SERVICE));
+		tremorSensor.setListener(new TremorSensor.TremorSensorListener() {
+			@Override
+			public void onMeasureTremor(double _tremor) {
+				tremor = _tremor;
+			}
+		});
 
 		// Setup SoundLevelMeter
 		soundLevelMeter = new SoundLevelMeter();
@@ -49,11 +61,15 @@ public class MainActivity extends Activity {
 					}
 				});
 			}
-		}, 0, TIMER_INTERVAL);
+		}, TIMER_INTERVAL, TIMER_INTERVAL);
 	}
 
 	private void onTimer() {
 		TextView textView;
+
+		// Show tremor
+		textView = (TextView) findViewById(R.id.tremor_textview);
+		textView.setText("Tremor : " + tremor);
 
 		// Show sound level
 		textView = (TextView) findViewById(R.id.soundlevel_textview);
@@ -76,12 +92,14 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
+		tremorSensor.pause();
 		soundLevelMeter.pause();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		tremorSensor.resume();
 		soundLevelMeter.resume();
 	}
 
