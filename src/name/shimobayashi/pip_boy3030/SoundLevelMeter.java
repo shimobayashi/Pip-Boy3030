@@ -65,7 +65,7 @@ public class SoundLevelMeter implements Runnable {
 				}
 
 				double db = 20.0 * Math.log10(maxValue / baseValue);
-				Log.d("SoundLevelMeter", "dB:" + db);
+				//Log.d("SoundLevelMeter", "dB:" + db);
 
 				if (listener != null) {
 					listener.onMeasureSoundLevel(db);

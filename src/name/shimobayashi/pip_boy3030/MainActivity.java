@@ -13,6 +13,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
 import android.hardware.SensorManager;
@@ -20,10 +21,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.widget.TextView;
+import android.util.Log;
 
 public class MainActivity extends Activity {
 	private final static int TIMER_INTERVAL = 1000;
-	private final static int PUT_INTERVAL = 10 * 1000;
+	private final static int PUT_INTERVAL = 30 * 1000;
 
 	private Handler handler;
 	private Timer timer;
@@ -64,7 +66,7 @@ public class MainActivity extends Activity {
 
 		// Setup SoundLevelMeter
 		soundLevelMeter = new SoundLevelMeter();
-		soundLevelMeter.setBaseValue(16.0);
+		soundLevelMeter.setBaseValue(12.0);
 		soundLevelMeter
 				.setListener(new SoundLevelMeter.SoundLevelMeterListener() {
 					@Override
@@ -183,6 +185,7 @@ public class MainActivity extends Activity {
 			// Do PUT
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(request);
+			//Log.d("entity", EntityUtils.toString(response.getEntity()));
 			responseCode = response.getStatusLine().getStatusCode();
 
 			// Reset
